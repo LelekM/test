@@ -10,33 +10,16 @@ try{
     echo "Connection failed: " . $e->getMessage();
 }
 
-$query = $db->prepare('select * from lelek.champions;');
-$query->execute();
-$result = $query->setFetchMode(PDO::FETCH_ASSOC);
-$data = $query->fetchAll()[0];
-$annie = new \App\Models\Champion($data);
-
-//var_dump($annie);
-
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-//$annie->addItem(["name"=>"randuin","hp"=>"20","armor"=>"150"]);
-
-//var_dump($annie);
-
-$annie->deleteItem("sunfire");
-
-$annie->receivePhysicalDamage('50');
-
 $mundo = \App\Models\Champion::find($db, 'Mundo');
 
-$mundo->addItem(["name"=>"sunfire","hp"=>"70","armor"=>"80"]);
+//$mundo->addItem(["name"=>"sunfire","hp"=>"70","armor"=>"80"]);
 
-$mundo->receivePhysicalDamage(300);
+//$mundo->receivePhysicalDamage(300);
 
-var_dump($mundo);
+$sunfire = \App\Models\Item::find($db,'sunfire');
+
+$mundo->addItem($sunfire);
+
+$champions = \App\Models\Champion::getAll($db);
+$items = \App\Models\Item::getAll($db);
+var_dump($items);

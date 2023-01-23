@@ -19,15 +19,15 @@ class Champion
         $this->maxHp = $this->baseHp;
     }
 
-    public function addItem($data)
+    public function addItem(Item $item)
     {
         if (count($this->items) > 5) {
             echo "MAX ITEMOW";
             return;
         }
-        $this->items [] = $data;
-        $this->addHp($data["hp"]); //do wyjebania, dodac funkcje co podlicza ile mam aktualnie max hp, odpalana po dodaniu itemu albo odjeciu
-        $this->addArmor($data["armor"]); // same situation
+        $this->items [] = $item;
+        $this->addHp($item->hp); //do wyjebania, dodac funkcje co podlicza ile mam aktualnie max hp, odpalana po dodaniu itemu albo odjeciu
+        $this->addArmor($item->armor); // same situation
     }
 
     public function deleteItem($name)
@@ -76,9 +76,13 @@ class Champion
         $query = $db->prepare('select * from lelek.champions;');
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
-        $data = $query->fetchAll()[0];
-        $champion = new \App\Models\Champion($data);
-        return $champion;
+        $champions = [];
+        $i=0;
+        foreach ($query as $row){
+            $champions [$i]= $row;
+            $i++;
+        }
+        return $champions;
 }
     public static function find($db, $name)
     {
