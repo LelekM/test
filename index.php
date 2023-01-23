@@ -21,10 +21,16 @@ $annie = new \App\Models\Champion($data);
 $annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
 $annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
 $annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
-$annie->addItem(["name"=>"randuin","hp"=>"20","armor"=>"150"]);
+//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
+//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
+//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
+//$annie->addItem(["name"=>"sunfire","hp"=>"50","armor"=>"10"]);
+//$annie->addItem(["name"=>"randuin","hp"=>"20","armor"=>"150"]);
+
+//var_dump($annie);
+
+$annie->deleteItem("sunfire");
+
+$annie->receivePhysicalDamage('50');
 
 var_dump($annie);
