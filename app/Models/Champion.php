@@ -34,10 +34,10 @@ class Champion
     {
         foreach ($this->items as $key=>$item)
         {
-            if ($item["name"] == $name )
+            if ($item->name == $name )
             {
-                $this->decreaseArmor($item["armor"]);
-                $this->decreaseHp($item["hp"]);
+                $this->decreaseArmor($item->armor);
+                $this->decreaseHp($item->hp);
                 unset($this->items[$key]);
                 return true;
             }
@@ -71,9 +71,9 @@ class Champion
         $this->armor = $this->armor - $data;
     }
 
-    public static function getAll($db)
+    public static function getAll()
     {
-        $query = $db->prepare('select * from lelek.champions;');
+        $query = \App\Services\Db::get()->prepare('select * from lelek.champions;');
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $champions = [];
@@ -82,9 +82,9 @@ class Champion
         }
         return $champions;
 }
-    public static function find($db, $name)
+    public static function find($name)
     {
-        $query = $db->prepare("select * from lelek.champions where name ='$name';");
+        $query = \App\Services\Db::get()->prepare("select * from lelek.champions where name ='$name';");
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $data = $query->fetchAll()[0];
@@ -92,11 +92,11 @@ class Champion
         return $champion;
     }
 
-    public static function addNew($db,string $name, int $hp, int $armor)
+    public static function addNew(string $name, int $hp, int $armor)
     {
-        $query = $db->prepare("insert into lelek.champions (name, hp, armor) values ('$name', '$hp', '$armor')");
+        $query = \App\Services\Db::get()->prepare("insert into lelek.champions (name, hp, armor) values ('$name', '$hp', '$armor')");
         $query->execute();
-        return static::find($db, $name);
+        return static::find($name);
 }
 
 }

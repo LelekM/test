@@ -16,9 +16,9 @@ class Item
         $this->armor = $data['armor'];
     }
 
-    public static function find($db, $name)
+    public static function find($name)
     {
-        $query = $db->prepare("select * from lelek.items where name ='$name';");
+        $query = \App\Services\Db::get()->prepare("select * from lelek.items where name ='$name';");
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $data = $query->fetchAll()[0];
@@ -26,9 +26,9 @@ class Item
         return $item;
     }
 
-    public static function getAll($db)
+    public static function getAll()
     {
-        $query = $db->prepare("select * from lelek.items");
+        $query = \App\Services\Db::get()->prepare("select * from lelek.items");
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $items = [];
@@ -37,10 +37,10 @@ class Item
         }
         return $items;
     }
-    public static function addNew($db,string $name, int $hp, int $armor)
+    public static function addNew(string $name, int $hp, int $armor)
     {
-        $query = $db->prepare("insert into lelek.items (name, hp, armor) values ('$name', '$hp', '$armor')");
+        $query = \App\Services\Db::get()->prepare("insert into lelek.items (name, hp, armor) values ('$name', '$hp', '$armor')");
         $query->execute();
-        return print "Nowy item dodany";
+        return static::find($name);
     }
 }
