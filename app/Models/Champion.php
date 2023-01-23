@@ -94,4 +94,11 @@ class Champion
         return $champion;
     }
 
+    public static function addNew($db,string $name, int $hp, int $armor)
+    {
+        $query = $db->prepare("insert into lelek.champions (name, hp, armor) values ('$name', '$hp', '$armor')");
+        $query->execute();
+        return print "Nowy champion dodany";
+}
+
 }

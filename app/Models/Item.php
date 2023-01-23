@@ -39,4 +39,10 @@ class Item
         }
         return $items;
     }
+    public static function addNew($db,string $name, int $hp, int $armor)
+    {
+        $query = $db->prepare("insert into lelek.items (name, hp, armor) values ('$name', '$hp', '$armor')");
+        $query->execute();
+        return print "Nowy item dodany";
+    }
 }
