@@ -1,5 +1,7 @@
 <?php
 namespace App\Models;
+use PDO;
+
 class Champion
 {
     public $name;
@@ -42,11 +44,11 @@ class Champion
         }
         return false;
     }
-    public function receivePhysicalDamage($dmg)
+    public function receivePhysicalDamage(int $dmg)
     {
         $dmgReduction = $this->armor / ($this->armor + 100);
 //        var_dump(round($dmgReduction, 2));
-        $this->actualHp = $this->actualHp - ($dmg - round(($dmg * round($dmgReduction, 2)), 0));
+        $this->actualHp = $this->actualHp - ($dmg - round(($dmg * $dmgReduction), 0));
     }
 
     public function addHp($data)
@@ -67,6 +69,25 @@ class Champion
     public function decreaseArmor($data)
     {
         $this->armor = $this->armor - $data;
+    }
+
+    public static function getAll($db)
+    {
+        $query = $db->prepare('select * from lelek.champions;');
+        $query->execute();
+        $query->setFetchMode(PDO::FETCH_ASSOC);
+        $data = $query->fetchAll()[0];
+        $champion = new \App\Models\Champion($data);
+        return $champion;
+}
+    public static function find($db, $name)
+    {
+        $query = $db->prepare("select * from lelek.champions where name ='$name';");
+        $query->execute();
+        $query->setFetchMode(PDO::FETCH_ASSOC);
+        $data = $query->fetchAll()[0];
+        $champion = new \App\Models\Champion($data);
+        return $champion;
     }
 
 }

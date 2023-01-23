@@ -33,4 +33,10 @@ $annie->deleteItem("sunfire");
 
 $annie->receivePhysicalDamage('50');
 
-var_dump($annie);
+$mundo = \App\Models\Champion::find($db, 'Mundo');
+
+$mundo->addItem(["name"=>"sunfire","hp"=>"70","armor"=>"80"]);
+
+$mundo->receivePhysicalDamage(300);
+
+var_dump($mundo);
