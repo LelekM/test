@@ -96,7 +96,7 @@ class Champion
     {
         $query = $db->prepare("insert into lelek.champions (name, hp, armor) values ('$name', '$hp', '$armor')");
         $query->execute();
-        return print "Nowy champion dodany";
+        return static::find($db, $name);
 }
 
 }
