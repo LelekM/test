@@ -77,10 +77,8 @@ class Champion
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $champions = [];
-        $i=0;
         foreach ($query as $row){
-            $champions [$i]= $row;
-            $i++;
+            $champions []= $row;
         }
         return $champions;
 }

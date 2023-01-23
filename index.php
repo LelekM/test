@@ -20,8 +20,8 @@ $sunfire = \App\Models\Item::find($db,'sunfire');
 
 $mundo->addItem($sunfire);
 
-//$champions = \App\Models\Champion::getAll($db);
+$champions = \App\Models\Champion::getAll($db);
 //$items = \App\Models\Item::getAll($db);
 //var_dump($items);
 
-\App\Models\Champion::addNew($db, 'Michal',100,300);
+var_dump($champions);

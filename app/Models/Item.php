@@ -32,10 +32,8 @@ class Item
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $items = [];
-        $i=0;
         foreach ($query as $row){
-            $items [$i]= $row;
-            $i++;
+            $items []= $row;
         }
         return $items;
     }
