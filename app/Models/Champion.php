@@ -10,9 +10,11 @@ class Champion
     public $baseHp;
     public $hpGrowth;
     public $armor;
+    public $baseArmor;
     public $armorGrowth;
     public $items = [];
     public $magicResist;
+    public $baseMagicResist;
     public $magicResistGrowth;
     public $level;
 
@@ -22,11 +24,11 @@ class Champion
         $this->actualHp = $data["hp"];
         $this->baseHp = $data["hp"];
         $this->armor = $data["armor"];
+        $this->magicResist = $data("magicResist");
         $this->maxHp = $this->baseHp;
         $this->level = 1;
         $this->hpGrowth = $data("hpGrowth");
         $this->armorGrowth = $data("armorGrowth");
-        $this->magicResist = $data("magicResist");
         $this->magicResistGrowth = $data("magicResistGrowth");
     }
 
@@ -40,6 +42,29 @@ class Champion
         $this->addHp($item->hp); //do wyjebania, dodac funkcje co podlicza ile mam aktualnie max hp, odpalana po dodaniu itemu albo odjeciu
         $this->addArmor($item->armor); // same situation
         $this->addMagicResist(($item->magicResist));
+    }
+
+    public function addLevel()
+    {
+        $this->level = $this->level + 1;
+        $armor = $this->armorGrowth * 1;
+        $magicResist = $this->magicResistGrowth *1;
+        $hp = $this->hpGrowth *1;
+        $this->addArmor($armor);
+        $this->addMagicResist($magicResist);
+        $this->addHp($hp);
+    }
+
+    public function setLevel(int $level)
+    {
+        $level = $level - $this->level;
+        $armor = $this->armorGrowth * $level;
+        $magicResist = $this->magicResistGrowth * $level;
+        $hp = $this->hpGrowth * $level;
+        $this->addArmor($armor);
+        $this->addMagicResist($magicResist);
+        $this->addHp($hp);
+        $this->level = $this->level - $level;
     }
 
     public function deleteItem($name)
@@ -63,34 +88,34 @@ class Champion
         $this->actualHp = $this->actualHp - ($dmg - round(($dmg * $dmgReduction), 0));
     }
 
-    public function addHp($itemHp)
+    public function addHp($hp)
     {
-        $this->actualHp = $this->actualHp + $itemHp;
-        $this->maxHp = $this->maxHp + $itemHp;
+        $this->actualHp = $this->actualHp + $hp;
+        $this->maxHp = $this->maxHp + $hp;
     }
-    public function addArmor($itemArmor)
+    public function addArmor($armor)
     {
-        $this->armor = $this->armor + $itemArmor;
-    }
-
-    public function addMagicResist($itemMagicResist)
-    {
-        $this->magicResist = $this->magicResist + $itemMagicResist;
+        $this->armor = $this->armor + $armor;
     }
 
-    public function decreaseHp($itemHp)
+    public function addMagicResist($mr)
     {
-        $this->actualHp = $this->actualHp - $itemHp;
-        $this->maxHp = $this->maxHp - $itemHp;
-    }
-    public function decreaseArmor($itemArmor)
-    {
-        $this->armor = $this->armor - $itemArmor;
+        $this->magicResist = $this->magicResist + $mr;
     }
 
-    public function decreaseMagicResist($itemMagicResist)
+    public function decreaseHp($hp)
     {
-        $this->magicResist = $this->magicResist - $itemMagicResist;
+        $this->actualHp = $this->actualHp - $hp;
+        $this->maxHp = $this->maxHp - $hp;
+    }
+    public function decreaseArmor($armor)
+    {
+        $this->armor = $this->armor - $armor;
+    }
+
+    public function decreaseMagicResist($mr)
+    {
+        $this->magicResist = $this->magicResist - $mr;
     }
 
     public static function getAll()
