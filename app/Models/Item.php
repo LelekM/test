@@ -9,11 +9,13 @@ class Item
     public $name;
     public $hp;
     public $armor;
+    public $magicResist;
     public function __Construct($data)
     {
         $this->name = $data['name'];
         $this->hp = $data['hp'];
         $this->armor = $data['armor'];
+        $this->magicResist = $data['magicResist'];
     }
 
     public static function find($name)
@@ -37,9 +39,9 @@ class Item
         }
         return $items;
     }
-    public static function addNew(string $name, int $hp, int $armor)
+    public static function addNew(string $name, int $hp, int $armor, int $magicResist)
     {
-        $query = \App\Services\Db::get()->prepare("insert into lelek.items (name, hp, armor) values ('$name', '$hp', '$armor')");
+        $query = \App\Services\Db::get()->prepare("insert into lelek.items (name, hp, armor, magicResist) values ('$name', '$hp', '$armor', '$magicResist')");
         $query->execute();
         return static::find($name);
     }

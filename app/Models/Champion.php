@@ -8,8 +8,14 @@ class Champion
     public $actualHp;
     public $maxHp;
     public $baseHp;
+    public $hpGrowth;
     public $armor;
+    public $armorGrowth;
     public $items = [];
+    public $magicResist;
+    public $magicResistGrowth;
+    public $level;
+
     public function __construct($data)
     {
         $this->name = $data["name"];
@@ -17,6 +23,11 @@ class Champion
         $this->baseHp = $data["hp"];
         $this->armor = $data["armor"];
         $this->maxHp = $this->baseHp;
+        $this->level = 1;
+        $this->hpGrowth = $data("hpGrowth");
+        $this->armorGrowth = $data("armorGrowth");
+        $this->magicResist = $data("magicResist");
+        $this->magicResistGrowth = $data("magicResistGrowth");
     }
 
     public function addItem(Item $item)
@@ -28,6 +39,7 @@ class Champion
         $this->items [] = $item;
         $this->addHp($item->hp); //do wyjebania, dodac funkcje co podlicza ile mam aktualnie max hp, odpalana po dodaniu itemu albo odjeciu
         $this->addArmor($item->armor); // same situation
+        $this->addMagicResist(($item->magicResist));
     }
 
     public function deleteItem($name)
@@ -38,6 +50,7 @@ class Champion
             {
                 $this->decreaseArmor($item->armor);
                 $this->decreaseHp($item->hp);
+                $this->decreaseMagicResist($item->magicResist);
                 unset($this->items[$key]);
                 return true;
             }
@@ -47,28 +60,37 @@ class Champion
     public function receivePhysicalDamage(int $dmg)
     {
         $dmgReduction = $this->armor / ($this->armor + 100);
-//        var_dump(round($dmgReduction, 2));
         $this->actualHp = $this->actualHp - ($dmg - round(($dmg * $dmgReduction), 0));
     }
 
-    public function addHp($data)
+    public function addHp($itemHp)
     {
-        $this->actualHp = $this->actualHp + $data;
-        $this->maxHp = $this->maxHp + $data;
+        $this->actualHp = $this->actualHp + $itemHp;
+        $this->maxHp = $this->maxHp + $itemHp;
     }
-    public function addArmor($data)
+    public function addArmor($itemArmor)
     {
-        $this->armor = $this->armor + $data;
+        $this->armor = $this->armor + $itemArmor;
     }
 
-    public function decreaseHp($data)
+    public function addMagicResist($itemMagicResist)
     {
-        $this->actualHp = $this->actualHp - $data;
-        $this->maxHp = $this->maxHp - $data;
+        $this->magicResist = $this->magicResist + $itemMagicResist;
     }
-    public function decreaseArmor($data)
+
+    public function decreaseHp($itemHp)
     {
-        $this->armor = $this->armor - $data;
+        $this->actualHp = $this->actualHp - $itemHp;
+        $this->maxHp = $this->maxHp - $itemHp;
+    }
+    public function decreaseArmor($itemArmor)
+    {
+        $this->armor = $this->armor - $itemArmor;
+    }
+
+    public function decreaseMagicResist($itemMagicResist)
+    {
+        $this->magicResist = $this->magicResist - $itemMagicResist;
     }
 
     public static function getAll()
@@ -92,9 +114,9 @@ class Champion
         return $champion;
     }
 
-    public static function addNew(string $name, int $hp, int $armor)
+    public static function addNew(string $name, int $hp,int $magicResist, int $armor, int $hpGrowth, int $armorGrowth, int $magicResistGrowth )
     {
-        $query = \App\Services\Db::get()->prepare("insert into lelek.champions (name, hp, armor) values ('$name', '$hp', '$armor')");
+        $query = \App\Services\Db::get()->prepare("insert into lelek.champions (name, hp, magicResist, armor, hpGrowth, armorGrowth, magicResistGrowth) values ('$name', '$hp','$magicResist', '$armor', '$hpGrowth',  '$armorGrowth', '$magicResistGrowth')");
         $query->execute();
         return static::find($name);
 }
