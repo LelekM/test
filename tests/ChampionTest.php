@@ -41,7 +41,7 @@ class ChampionTest extends TestCase
         $this->assertEquals(30, $this->malfurion->armor);
     }
 
-    public function test_test_test()
+    public function test_any_meaningful_function_name()
     {
 
     }
