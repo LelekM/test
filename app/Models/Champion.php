@@ -74,7 +74,7 @@ class Champion
         $this->experience = $this->levelTreshold[$this->level][0];
     }
 
-    public function setLevel(int $level)
+    public function setLevel(int $level, $experience = null)
     {
         $level = $level - $this->level;
         $armor = $this->armorGrowth * $level;
@@ -84,7 +84,10 @@ class Champion
         $this->addMagicResist($magicResist);
         $this->addHp($hp);
         $this->level = $this->level + $level;
-        $this->experience = $this->levelTreshold[$this->level][0];
+        if(is_null($experience))
+        {
+            $this->experience = $this->levelTreshold[$this->level][0];
+        }
     }
 
     public function receivePhysicalDamage(int $dmg)
@@ -169,13 +172,13 @@ class Champion
         }
     }
 
-    public function checkLevel()
+    public function checkLevel($experience = null)
     {
         for($i = 1; $i <=18; $i++)
         {
             if ($this->experience >= $this->levelTreshold[$i][0] and $this->experience <= $this->levelTreshold[$i][1])
             {
-                $this->level = $i;
+                $this->setLevel($i, $experience);
                 return;
             }
         }
@@ -184,7 +187,7 @@ class Champion
     public function addExperience(int $experience)
     {
         $this->experience = $this->experience + $experience;
-        $this->checkLevel();
+        $this->checkLevel($experience);
     }
 
 }
