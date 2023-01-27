@@ -15,6 +15,8 @@ class Champion
     public $magicResist;
     public $magicResistGrowth;
     public $level;
+    public $levelTreshold = [];
+    public $experience;
 
     public function __construct($data)
     {
@@ -28,6 +30,8 @@ class Champion
         $this->hpGrowth = $data["hpGrowth"];
         $this->armorGrowth = $data["armorGrowth"];
         $this->magicResistGrowth = $data["magicResistGrowth"];
+        $this->levels();
+        $this->experience = 0;
     }
 
     public function addItem(Item $item)
@@ -67,6 +71,7 @@ class Champion
         $this->addArmor($armor);
         $this->addMagicResist($magicResist);
         $this->addHp($hp);
+        $this->experience = $this->levelTreshold[$this->level][0];
     }
 
     public function setLevel(int $level)
@@ -78,7 +83,8 @@ class Champion
         $this->addArmor($armor);
         $this->addMagicResist($magicResist);
         $this->addHp($hp);
-        $this->level = $this->level - $level;
+        $this->level = $this->level + $level;
+        $this->experience = $this->levelTreshold[$this->level][0];
     }
 
     public function receivePhysicalDamage(int $dmg)
@@ -149,6 +155,36 @@ class Champion
         $query = \App\Services\Db::get()->prepare("insert into lelek.champions (name, hp, magicResist, armor, hpGrowth, armorGrowth, magicResistGrowth) values ('$name', '$hp','$magicResist', '$armor', '$hpGrowth',  '$armorGrowth', '$magicResistGrowth')");
         $query->execute();
         return static::find($name);
-}
+    }
+
+    public function levels()
+    {
+        $experience = 0;
+        for($i = 1; $i <=18; $i++)
+        {
+            $this->levelTreshold[$i][0] = $experience;
+            $experience = $experience + 99;
+            $this->levelTreshold[$i][1] = $experience;
+            $experience = $experience + 1;
+        }
+    }
+
+    public function checkLevel()
+    {
+        for($i = 1; $i <=18; $i++)
+        {
+            if ($this->experience >= $this->levelTreshold[$i][0] and $this->experience <= $this->levelTreshold[$i][1])
+            {
+                $this->level = $i;
+                return;
+            }
+        }
+    }
+
+    public function addExperience(int $experience)
+    {
+        $this->experience = $this->experience + $experience;
+        $this->checkLevel();
+    }
 
 }
