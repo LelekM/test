@@ -73,4 +73,16 @@ class ChampionTest extends TestCase
         self::assertEquals(16,$annie->level);
         self::assertEquals(1500, $annie->experience);
     }
+
+    public function test_champion_can_add_experience()
+    {
+        $annie = \App\Models\Champion::find("Annie");
+        self::assertInstanceOf(\App\Models\Champion::class, $annie);
+        $annie->addExperience(560);
+        self::assertEquals(6, $annie->level);
+        self::assertEquals(560, $annie->experience);
+        self::assertEquals(135, $annie->maxHp);
+        self::assertEquals(41, $annie->armor);
+        self::assertEquals(27, $annie->magicResist);
+    }
 }
