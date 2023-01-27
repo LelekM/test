@@ -40,9 +40,4 @@ class ChampionTest extends TestCase
         $this->assertEquals(130, $this->malfurion->maxHp);
         $this->assertEquals(30, $this->malfurion->armor);
     }
-
-    public function test_any_meaningful_function_name()
-    {
-
-    }
 }
