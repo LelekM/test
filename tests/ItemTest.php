@@ -7,7 +7,7 @@ class ItemTest extends TestCase
 {
     public function test_add_new_item()
     {
-        $trinity = \App\Models\Item::addNew('Trinity', 100, 30);
+        $trinity = \App\Models\Item::addNew('Trinity', 100, 30, 5);
         $this->assertInstanceOf(\App\Models\Item::class, $trinity);
         $search = \App\Models\Item::find("Trinity");
         $this->assertEquals(100,$search->hp);

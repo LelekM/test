@@ -10,11 +10,9 @@ class Champion
     public $baseHp;
     public $hpGrowth;
     public $armor;
-    public $baseArmor;
     public $armorGrowth;
     public $items = [];
     public $magicResist;
-    public $baseMagicResist;
     public $magicResistGrowth;
     public $level;
 
@@ -24,12 +22,12 @@ class Champion
         $this->actualHp = $data["hp"];
         $this->baseHp = $data["hp"];
         $this->armor = $data["armor"];
-        $this->magicResist = $data("magicResist");
+        $this->magicResist = $data["magicResist"];
         $this->maxHp = $this->baseHp;
         $this->level = 1;
-        $this->hpGrowth = $data("hpGrowth");
-        $this->armorGrowth = $data("armorGrowth");
-        $this->magicResistGrowth = $data("magicResistGrowth");
+        $this->hpGrowth = $data["hpGrowth"];
+        $this->armorGrowth = $data["armorGrowth"];
+        $this->magicResistGrowth = $data["magicResistGrowth"];
     }
 
     public function addItem(Item $item)
@@ -41,7 +39,23 @@ class Champion
         $this->items [] = $item;
         $this->addHp($item->hp); //do wyjebania, dodac funkcje co podlicza ile mam aktualnie max hp, odpalana po dodaniu itemu albo odjeciu
         $this->addArmor($item->armor); // same situation
-        $this->addMagicResist(($item->magicResist));
+        $this->addMagicResist($item->magicResist);
+    }
+
+    public function deleteItem($name)
+    {
+        foreach ($this->items as $key=>$item)
+        {
+            if ($item->name == $name )
+            {
+                $this->decreaseArmor($item->armor);
+                $this->decreaseHp($item->hp);
+                $this->decreaseMagicResist($item->magicResist);
+                unset($this->items[$key]);
+                return true;
+            }
+        }
+        return false;
     }
 
     public function addLevel()
@@ -67,21 +81,6 @@ class Champion
         $this->level = $this->level - $level;
     }
 
-    public function deleteItem($name)
-    {
-        foreach ($this->items as $key=>$item)
-        {
-            if ($item->name == $name )
-            {
-                $this->decreaseArmor($item->armor);
-                $this->decreaseHp($item->hp);
-                $this->decreaseMagicResist($item->magicResist);
-                unset($this->items[$key]);
-                return true;
-            }
-        }
-        return false;
-    }
     public function receivePhysicalDamage(int $dmg)
     {
         $dmgReduction = $this->armor / ($this->armor + 100);
