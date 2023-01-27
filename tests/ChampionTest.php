@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class ChampionTest extends TestCase
 {
-    public function test_champion_can_take_damage()
+    public function test_champion_can_take_physical_damage()
     {
         $this->cwel = \App\Models\Champion::addNew('cwel', 100, 200, 200, 5, 5, 5);
         $this->assertInstanceOf(\App\Models\Champion::class, $this->cwel);
@@ -14,6 +14,16 @@ class ChampionTest extends TestCase
         $this->cwel->receivePhysicalDamage(150);
         $this->assertEquals(100, $this->cwel->baseHp);
         $this->assertEquals(50, $this->cwel->actualHp);
+    }
+    public function test_champion_can_take_magic_damage()
+    {
+        $mundo = \App\Models\Champion::find("mundo");
+        self::assertInstanceOf(\App\Models\Champion::class, $mundo);
+        self::assertEquals(430, $mundo->baseHp);
+        self::assertEquals(430, $mundo->actualHp);
+        $mundo->receiveMagicDamage(150);
+        self::assertEquals(430, $mundo->baseHp);
+        self::assertEquals(355, $mundo->actualHp);
     }
     public function test_champion_can_add_items()
     {

@@ -87,6 +87,12 @@ class Champion
         $this->actualHp = $this->actualHp - ($dmg - round(($dmg * $dmgReduction), 0));
     }
 
+    public function receiveMagicDamage(int $dmg)
+    {
+        $dmgReduction = $this->magicResist / ($this->magicResist + 100);
+        $this->actualHp = $this->actualHp - ($dmg - round(($dmg * $dmgReduction), 0));
+    }
+
     public function addHp($hp)
     {
         $this->actualHp = $this->actualHp + $hp;
