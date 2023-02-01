@@ -153,7 +153,8 @@ class Champion
         return $champion;
     }
 
-    public static function addNew(string $name, int $hp,int $magicResist, int $armor, int $hpGrowth, int $armorGrowth, int $magicResistGrowth )
+    public static function addNew(string $name, int $hp, int $magicResist, int $armor, int $hpGrowth, int $armorGrowth, int $magicResistGrowth)
+
     {
         $query = \App\Services\Db::get()->prepare("insert into lelek.champions (name, hp, magicResist, armor, hpGrowth, armorGrowth, magicResistGrowth) values ('$name', '$hp','$magicResist', '$armor', '$hpGrowth',  '$armorGrowth', '$magicResistGrowth')");
         $query->execute();
