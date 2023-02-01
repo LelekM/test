@@ -10,7 +10,7 @@ class Item
     public $hp;
     public $armor;
     public $magicResist;
-    public function __Construct($data)
+    public function __construct($data)
     {
         $this->name = $data['name'];
         $this->hp = $data['hp'];
