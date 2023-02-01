@@ -177,7 +177,8 @@ class Champion
     {
         for($i = 1; $i <=18; $i++)
         {
-            if ($this->experience >= $this->levelTreshold[$i][0] and $this->experience <= $this->levelTreshold[$i][1])
+            if ($this->experience >= $this->levelTreshold[$i][0] && $this->experience <= $this->levelTreshold[$i][1])
+
             {
                 $this->setLevel($i, $experience);
                 return;
