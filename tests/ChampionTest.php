@@ -70,7 +70,7 @@ class ChampionTest extends TestCase
         self::assertEquals(165, $annie->maxHp);
         self::assertEquals(81, $annie->armor);
         self::assertEquals(77, $annie->magicResist);
-        self::assertEquals(16,$annie->level);
+        self::assertEquals(16, $annie->level);
         self::assertEquals(1500, $annie->experience);
     }
 
