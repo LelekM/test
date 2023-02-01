@@ -76,7 +76,8 @@ class Champion
 
     public function setLevel(int $level, $experience = null)
     {
-        $level = $level - $this->level;
+        $level -= $this->level;
+
         $armor = $this->armorGrowth * $level;
         $magicResist = $this->magicResistGrowth * $level;
         $hp = $this->hpGrowth * $level;
