@@ -12,12 +12,16 @@ class ItemTest extends TestCase
         $search = \App\Models\Item::find("Trinity");
         $this->assertEquals(100,$search->hp);
         $this->assertEquals(30,$search->armor);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.items where name='Trinity'");
+        $query->execute();
     }
 
     public function test_find_item()
     {
-        $search = \App\Models\Item::find("sunfire");
-        $this->assertEquals(50,$search->hp);
-        $this->assertEquals(10,$search->armor);
+        $lapis = \App\Models\Item::addNew('Lapis', 50, 10, 0);
+        $this->assertEquals(50,$lapis->hp);
+        $this->assertEquals(10,$lapis->armor);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.items where name='Lapis'");
+        $query->execute();
     }
 }

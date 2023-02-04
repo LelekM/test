@@ -13,6 +13,8 @@ class Champion
     public $armorGrowth;
     public $items = [];
     public $magicResist;
+    public $baseMr;
+    public $baseArmor;
     public $magicResistGrowth;
     public $level;
     public $experience;
@@ -26,7 +28,9 @@ class Champion
         $this->actualHp = $data["hp"];
         $this->baseHp = $data["hp"];
         $this->armor = $data["armor"];
+        $this->baseArmor = $data["armor"];
         $this->magicResist = $data["magicResist"];
+        $this->baseMr = $data["magicResist"];
         $this->maxHp = $this->baseHp;
         $this->level = 1;
         $this->hpGrowth = $data["hpGrowth"];
@@ -42,9 +46,7 @@ class Champion
             return;
         }
         $this->items [] = $item;
-        $this->addHp($item->hp); //do wyjebania, dodac funkcje co podlicza ile mam aktualnie max hp, odpalana po dodaniu itemu albo odjeciu
-        $this->addArmor($item->armor); // same situation
-        $this->addMagicResist($item->magicResist);
+        $this->updateStats();
     }
 
     public function deleteItem($name)
@@ -53,10 +55,8 @@ class Champion
         {
             if ($item->name == $name )
             {
-                $this->decreaseArmor($item->armor);
-                $this->decreaseHp($item->hp);
-                $this->decreaseMagicResist($item->magicResist);
                 unset($this->items[$key]);
+                $this->updateStats();
                 return true;
             }
         }
@@ -66,30 +66,19 @@ class Champion
     public function addLevel()
     {
         $this->level = $this->level + 1;
-        $armor = $this->armorGrowth * 1;
-        $magicResist = $this->magicResistGrowth *1;
-        $hp = $this->hpGrowth *1;
-        $this->addArmor($armor);
-        $this->addMagicResist($magicResist);
-        $this->addHp($hp);
-        $this->experience = Champion::$experienceTreshold[$this->level][0];
+        $this->experience = Champion::$experienceTreshold[$this->level-1][0];
+        $this->updateStats();
     }
 
     public function setLevel(int $level, $experience = null)
     {
         $levelDiff = $level - $this->level;
-
-        $armor = $this->armorGrowth * $levelDiff;
-        $magicResist = $this->magicResistGrowth * $levelDiff;
-        $hp = $this->hpGrowth * $levelDiff;
-        $this->addArmor($armor);
-        $this->addMagicResist($magicResist);
-        $this->addHp($hp);
         $this->level = $this->level + $levelDiff;
         if(is_null($experience))
         {
-            $this->experience = Champion::$experienceTreshold[$this->level][0];
+            $this->experience = Champion::$experienceTreshold[$this->level-1][0];
         }
+        $this->updateStats();
     }
 
     public function receivePhysicalDamage(int $dmg)
@@ -104,35 +93,6 @@ class Champion
         $this->actualHp = $this->actualHp - ($dmg - round(($dmg * $dmgReduction), 0));
     }
 
-    public function addHp($hp)
-    {
-        $this->actualHp = $this->actualHp + $hp;
-        $this->maxHp = $this->maxHp + $hp;
-    }
-    public function addArmor($armor)
-    {
-        $this->armor = $this->armor + $armor;
-    }
-
-    public function addMagicResist($mr)
-    {
-        $this->magicResist = $this->magicResist + $mr;
-    }
-
-    public function decreaseHp($hp)
-    {
-        $this->actualHp = $this->actualHp - $hp;
-        $this->maxHp = $this->maxHp - $hp;
-    }
-    public function decreaseArmor($armor)
-    {
-        $this->armor = $this->armor - $armor;
-    }
-
-    public function decreaseMagicResist($mr)
-    {
-        $this->magicResist = $this->magicResist - $mr;
-    }
 
     public static function getAll()
     {
@@ -182,6 +142,33 @@ class Champion
     {
         $this->experience = $this->experience + $experience;
         $this->checkLevel($experience);
+    }
+
+    public function updateStats()
+    {
+        $bonusHp = 0;
+        $bonusArmor = 0;
+        $bonusMr = 0;
+        foreach ($this->items as $item)
+        {
+           $bonusHp += $item->hp;
+           $bonusArmor += $item->armor;
+           $bonusMr += $item->magicResist;
+        }
+
+        $scalingHp = ($this->level-1) * $this->hpGrowth;
+        $scalingArmor = ($this->level-1) * $this->armorGrowth;
+        $scalingMr = ($this->level-1) * $this->magicResistGrowth;
+
+        $bonusHp += $scalingHp;
+        $bonusArmor += $scalingArmor;
+        $bonusMr += $scalingMr;
+
+
+        $this->maxHp = $this->baseHp + $bonusHp;
+        $this->actualHp = $this->actualHp + $bonusHp;
+        $this->armor = $this->baseArmor + $bonusArmor;
+        $this->magicResist = $this->baseMr + $bonusMr;
     }
 
 }
