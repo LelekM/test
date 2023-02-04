@@ -14,16 +14,20 @@ class ChampionTest extends TestCase
         $this->cwel->receivePhysicalDamage(150);
         $this->assertEquals(100, $this->cwel->baseHp);
         $this->assertEquals(50, $this->cwel->actualHp);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.champions where name='cwel'");
+        $query->execute();
     }
     public function test_champion_can_take_magic_damage()
     {
-        $mundo = \App\Models\Champion::find("mundo");
-        self::assertInstanceOf(\App\Models\Champion::class, $mundo);
-        self::assertEquals(430, $mundo->baseHp);
-        self::assertEquals(430, $mundo->actualHp);
-        $mundo->receiveMagicDamage(150);
-        self::assertEquals(430, $mundo->baseHp);
-        self::assertEquals(355, $mundo->actualHp);
+        $magic = \App\Models\Champion::addNew('Magic', 430,100,120,3,4,5);
+        self::assertInstanceOf(\App\Models\Champion::class, $magic);
+        self::assertEquals(430, $magic->baseHp);
+        self::assertEquals(430, $magic->actualHp);
+        $magic->receiveMagicDamage(150);
+        self::assertEquals(430, $magic->baseHp);
+        self::assertEquals(355, $magic->actualHp);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.champions where name='Magic'");
+        $query->execute();
     }
     public function test_champion_can_add_items()
     {
@@ -34,6 +38,8 @@ class ChampionTest extends TestCase
         $this->assertCount(1, $this->vayne->items);
         $this->assertEquals(120, $this->vayne->maxHp);
         $this->assertEquals(40, $this->vayne->armor);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.champions where name='Vayne'");
+        $query->execute();
     }
     public function test_champion_can_delete_items()
     {
@@ -49,40 +55,46 @@ class ChampionTest extends TestCase
         $this->assertCount(1, $this->malfurion->items);
         $this->assertEquals(130, $this->malfurion->maxHp);
         $this->assertEquals(30, $this->malfurion->armor);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.champions where name='Malfurion'");
+        $query->execute();
     }
 
     public function test_champion_can_add_level()
     {
-        $annie = \App\Models\Champion::find("Annie");
-        self::assertInstanceOf(\App\Models\Champion::class, $annie);
-        $annie->addLevel();
-        self::assertEquals(2,$annie->level);
-        self::assertEquals(123, $annie->maxHp);
-        self::assertEquals(25, $annie->armor);
-        self::assertEquals(7, $annie->magicResist);
+        $granny = \App\Models\Champion::addNew('Granny',120,2,21,3,4,5);
+        self::assertInstanceOf(\App\Models\Champion::class, $granny);
+        $granny->addLevel();
+        self::assertEquals(2,$granny->level);
+        self::assertEquals(123, $granny->maxHp);
+        self::assertEquals(25, $granny->armor);
+        self::assertEquals(7, $granny->magicResist);
     }
 
     public function test_champion_can_set_levels()
     {
-        $annie = \App\Models\Champion::find("Annie");
-        self::assertInstanceOf(\App\Models\Champion::class, $annie);
-        $annie->setLevel(16);
-        self::assertEquals(165, $annie->maxHp);
-        self::assertEquals(81, $annie->armor);
-        self::assertEquals(77, $annie->magicResist);
-        self::assertEquals(16, $annie->level);
-        self::assertEquals(1500, $annie->experience);
+        $granny = \App\Models\Champion::addNew('Granny',120,2,21,3,4,5);
+        self::assertInstanceOf(\App\Models\Champion::class, $granny);
+        $granny->setLevel(16);
+        self::assertEquals(165, $granny->maxHp);
+        self::assertEquals(81, $granny->armor);
+        self::assertEquals(77, $granny->magicResist);
+        self::assertEquals(16, $granny->level);
+        self::assertEquals(1500, $granny->experience);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.champions where name='Granny'");
+        $query->execute();
     }
 
     public function test_champion_can_add_experience()
     {
-        $annie = \App\Models\Champion::find("Annie");
-        self::assertInstanceOf(\App\Models\Champion::class, $annie);
-        $annie->addExperience(560);
-        self::assertEquals(6, $annie->level);
-        self::assertEquals(560, $annie->experience);
-        self::assertEquals(135, $annie->maxHp);
-        self::assertEquals(41, $annie->armor);
-        self::assertEquals(27, $annie->magicResist);
+        $granny = \App\Models\Champion::addNew('Granny',120,2,21,3,4,5);
+        self::assertInstanceOf(\App\Models\Champion::class, $granny);
+        $granny->addExperience(560);
+        self::assertEquals(6, $granny->level);
+        self::assertEquals(560, $granny->experience);
+        self::assertEquals(135, $granny->maxHp);
+        self::assertEquals(41, $granny->armor);
+        self::assertEquals(27, $granny->magicResist);
+        $query = \App\Services\Db::get()->prepare("Delete from lelek.champions where name='Granny'");
+        $query->execute();
     }
 }

@@ -15,8 +15,10 @@ class Champion
     public $magicResist;
     public $magicResistGrowth;
     public $level;
-    public $levelTreshold = [];
     public $experience;
+    public static $experienceTreshold = [[0,99],[100, 199],[200, 299], [300, 399],[400,499],[500,599],
+        [600,699],[700,799],[800,899],[900,999],[1000,1099],[1100, 1199], [1200, 1299],
+        [1300, 1399], [1400, 1499],[1500,1599],[1600,1699],[1700,100000]];
 
     public function __construct($data)
     {
@@ -30,7 +32,6 @@ class Champion
         $this->hpGrowth = $data["hpGrowth"];
         $this->armorGrowth = $data["armorGrowth"];
         $this->magicResistGrowth = $data["magicResistGrowth"];
-        $this->levels();
         $this->experience = 0;
     }
 
@@ -71,23 +72,23 @@ class Champion
         $this->addArmor($armor);
         $this->addMagicResist($magicResist);
         $this->addHp($hp);
-        $this->experience = $this->levelTreshold[$this->level][0];
+        $this->experience = Champion::$experienceTreshold[$this->level][0];
     }
 
     public function setLevel(int $level, $experience = null)
     {
-        $level -= $this->level;
+        $levelDiff = $level - $this->level;
 
-        $armor = $this->armorGrowth * $level;
-        $magicResist = $this->magicResistGrowth * $level;
-        $hp = $this->hpGrowth * $level;
+        $armor = $this->armorGrowth * $levelDiff;
+        $magicResist = $this->magicResistGrowth * $levelDiff;
+        $hp = $this->hpGrowth * $levelDiff;
         $this->addArmor($armor);
         $this->addMagicResist($magicResist);
         $this->addHp($hp);
-        $this->level = $this->level + $level;
+        $this->level = $this->level + $levelDiff;
         if(is_null($experience))
         {
-            $this->experience = $this->levelTreshold[$this->level][0];
+            $this->experience = Champion::$experienceTreshold[$this->level][0];
         }
     }
 
@@ -162,26 +163,27 @@ class Champion
         return static::find($name);
     }
 
+
     public function levels()
     {
         $experience = 0;
         for($i = 1; $i <=18; $i++)
         {
-            $this->levelTreshold[$i][0] = $experience;
+            $this->experienceTreshold[$i][0] = $experience;
             $experience = $experience + 99;
-            $this->levelTreshold[$i][1] = $experience;
+            $this->experienceTreshold[$i][1] = $experience;
             $experience = $experience + 1;
         }
     }
 
     public function checkLevel($experience = null)
     {
-        for($i = 1; $i <=18; $i++)
+        for($i = 0; $i <=17; $i++)
         {
-            if ($this->experience >= $this->levelTreshold[$i][0] && $this->experience <= $this->levelTreshold[$i][1])
+            if ($this->experience >= Champion::$experienceTreshold[$i][0] && $this->experience <= Champion::$experienceTreshold[$i][1])
 
             {
-                $this->setLevel($i, $experience);
+                $this->setLevel(($i+1), $experience);
                 return;
             }
         }
