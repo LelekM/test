@@ -164,17 +164,6 @@ class Champion
     }
 
 
-    public function levels()
-    {
-        $experience = 0;
-        for($i = 1; $i <=18; $i++)
-        {
-            $this->experienceTreshold[$i][0] = $experience;
-            $experience = $experience + 99;
-            $this->experienceTreshold[$i][1] = $experience;
-            $experience = $experience + 1;
-        }
-    }
 
     public function checkLevel($experience = null)
     {
